@@ -1,0 +1,24 @@
+{
+  "name": "api-similarity-analyzer-service",
+  "version": "1.0.0",
+  "description": "Api Similarity Analyzer",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "graphql"
+  ],
+  "author": "Marcos Borges",
+  "license": "ISC",
+  "dependencies": {
+    "@apidevtools/swagger-parser": "^10.0.3",
+    "apollo-server": "^3.6.1",
+    "apollo-server-core": "^3.6.1",
+    "flat": "^5.0.2",
+    "nodemon": "^2.0.15",
+    "swagger-client": "^3.18.1"
+  }
+}
