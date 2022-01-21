@@ -2,6 +2,8 @@
 
 API Similarity Analyzer Service (ASAS) is a microservice that will analyze the similarities of requests and responses contained in OpenAPI description files.
 
+<img src="https://github.com/marcosborges1/api-similarity-analyzer-service/blob/main/images/api_similarity.png" height="300"/>
+
 ## Note - Project Status
 
 As it is a proof of concept, it is in a phase of improvement and evolution.
