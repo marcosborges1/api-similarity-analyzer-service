@@ -20,8 +20,12 @@ const querySchema = gql`
 		name: String
 		path: String
 	}
+	type Me {
+		name: String
+	}
 	type Query {
 		getSimilaritiesFromAPIs(dataAPI: [inputAPI]): Report!
+		me: Me
 	}
 `;
 

@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@apidevtools/swagger-parser": "^10.0.3",
+    "@apollo/subgraph": "^0.1.5",
     "apollo-server": "^3.6.1",
     "apollo-server-core": "^3.6.1",
     "flat": "^5.0.2",

@@ -41,6 +41,11 @@ const resolvers = {
 				responses: reportAPI,
 			};
 		},
+		me: () => {
+			return {
+				name: "marcos",
+			};
+		},
 	},
 };
 
