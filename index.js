@@ -11,7 +11,7 @@ const server = new ApolloServer({
 	cors: true,
 	typeDefs,
 	resolvers,
-	schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+	// schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
 	plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 });
 

@@ -5,6 +5,7 @@ const querySchema = gql`
 	type Report {
 		requests: JSON
 		responses: JSON
+		similarities: [Similarities]
 	}
 	type Similarities {
 		originAPI: API
@@ -13,19 +14,15 @@ const querySchema = gql`
 	type API {
 		url: String
 		method: String
-		inputParameters: JSON
-		outuputParameters: JSON
+		parametersIn: JSON
+		parametersOut: JSON
 	}
 	input inputAPI {
 		name: String
 		path: String
 	}
-	type Me {
-		name: String
-	}
 	type Query {
 		getSimilaritiesFromAPIs(dataAPI: [inputAPI]): Report!
-		me: Me
 	}
 `;
 
