@@ -40,9 +40,66 @@ module.exports = {
 
 		return ra[auxField.length - 1];
 	},
-	getResponsesApi: function (method, value, reportAPI, keys, i) {
+	getParameterIn: (value) => {
+		// const aux =
+		// 		value[method]["responses"]["200"]["content"]["application/json"][
+		// 			"schema"
+		// 		];
+		let method = "post";
 		if (value.hasOwnProperty(method)) {
-			auxInfoValues = {};
+			const fields =
+				value[method]["requestBody"]["content"]["application/json"]["schema"];
+			const entries = Object.entries(flatten(fields));
+			let auxInfoValues = {};
+
+			entries.map((entry, i) => {
+				// console.log(i);
+				const key = entry[0];
+				const value = entry[1];
+
+				let newCorrectArray = {};
+				if (RegExp(/.type/).test(key)) {
+					console.log(entry);
+					// const keyWord = "properties";
+					// const indexBegin = key.indexOf(keyWord);
+					// const newKey = module.exports
+					// 	.replaceRange(key, 0, indexBegin + 11, "")
+					// 	.replace(/properties./gi, "")
+					// 	.replace(".type", "");
+					// auxInfoValues[newKey] = value;
+
+					// console.log(auxInfoValues);
+					// let extractedArray = module.exports.extractArrayType(auxInfoValues);
+					// newCorrectArray = module.exports.removeArrayType(
+					// 	auxInfoValues,
+					// 	extractedArray
+					// );
+				}
+				// console.log(newCorrectArray);
+			});
+			// const entries = Object.entries(flatten(fields));
+
+			// entries.map((entry) => {
+			// 	const key = entry[0];
+			// 	const value = entry[1];
+			// 	console.log(key);
+
+			// 	// if (RegExp(/.type/).test(key)) {
+			// 	// 	const keyWord = "properties";
+			// 	// 	const indexBegin = key.indexOf(keyWord);
+			// 	// 	const newKey = module.exports
+			// 	// 		.replaceRange(key, 0, indexBegin + 11, "")
+			// 	// 		.replace(/properties./gi, "")
+			// 	// 		.replace(".type", "");
+			// 	// 	auxInfoValues[newKey] = value;
+			// 	// }
+			// });
+		}
+		return "";
+	},
+	getResponsesApi: function (apiName, value, method, reportAPI, keys, i) {
+		if (value.hasOwnProperty(method)) {
+			let auxInfoValues = {};
 			const aux =
 				value[method]["responses"]["200"]["content"]["application/json"][
 					"schema"
@@ -54,6 +111,7 @@ module.exports = {
 				const key = entry[0];
 				const value = entry[1];
 
+				let newCorrectArray = {};
 				if (RegExp(/.type/).test(key)) {
 					const keyWord = "properties";
 					const indexBegin = key.indexOf(keyWord);
@@ -62,7 +120,13 @@ module.exports = {
 						.replace(/properties./gi, "")
 						.replace(".type", "");
 					auxInfoValues[newKey] = value;
+					let extractedArray = module.exports.extractArrayType(auxInfoValues);
+					newCorrectArray = module.exports.removeArrayType(
+						auxInfoValues,
+						extractedArray
+					);
 				}
+				// console.log(newCorrectArray);
 			});
 
 			const extractedArray = module.exports.extractArrayType(auxInfoValues);
