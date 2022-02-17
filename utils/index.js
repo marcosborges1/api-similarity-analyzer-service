@@ -40,111 +40,152 @@ module.exports = {
 
 		return ra[auxField.length - 1];
 	},
-	getParameterIn: (value) => {
+	getRequestsAPI: async (value, method, reportAPI, keys, i) => {
 		// const aux =
 		// 		value[method]["responses"]["200"]["content"]["application/json"][
 		// 			"schema"
 		// 		];
-		let method = "post";
+		// let method = "post";
 		if (value.hasOwnProperty(method)) {
-			const fields =
-				value[method]["requestBody"]["content"]["application/json"]["schema"];
-			const entries = Object.entries(flatten(fields));
-			let auxInfoValues = {};
+			if (method == "get") {
+				let keyMethod = {};
+				keyMethod["request"] = "";
+				const auxMethod = {};
+				auxMethod[method] = keyMethod;
+				reportAPI[keys[i]] = auxMethod;
+			} else {
+				const fields =
+					value[method]["requestBody"]["content"]["application/json"]["schema"];
+				const entries = Object.entries(flatten(fields));
+				let auxInfoValues = {};
 
-			entries.map((entry, i) => {
-				// console.log(i);
-				const key = entry[0];
-				const value = entry[1];
+				// console.log(fields.oneOf);
 
-				let newCorrectArray = {};
-				if (RegExp(/.type/).test(key)) {
-					console.log(entry);
-					// const keyWord = "properties";
-					// const indexBegin = key.indexOf(keyWord);
-					// const newKey = module.exports
-					// 	.replaceRange(key, 0, indexBegin + 11, "")
-					// 	.replace(/properties./gi, "")
-					// 	.replace(".type", "");
-					// auxInfoValues[newKey] = value;
+				entries.map((entry, i) => {
+					const key = entry[0];
+					const value = entry[1];
 
-					// console.log(auxInfoValues);
-					// let extractedArray = module.exports.extractArrayType(auxInfoValues);
-					// newCorrectArray = module.exports.removeArrayType(
-					// 	auxInfoValues,
-					// 	extractedArray
-					// );
-				}
-				// console.log(newCorrectArray);
-			});
-			// const entries = Object.entries(flatten(fields));
+					let newCorrectArray = {};
+					if (RegExp(/.type/).test(key)) {
+						// console.log(entry);
+						// console.log(key);
+						const keyWord = "properties";
+						const indexBegin = key.indexOf(keyWord);
+						// const newKey = key.substring(0, indexBegin + 10);
+						const newKey = module.exports
+							.replaceRange(key, 0, indexBegin + 11, "")
+							.replace(/properties./gi, "")
+							.replace(".type", "");
 
-			// entries.map((entry) => {
-			// 	const key = entry[0];
-			// 	const value = entry[1];
-			// 	console.log(key);
+						// console.log(newKey);
 
-			// 	// if (RegExp(/.type/).test(key)) {
-			// 	// 	const keyWord = "properties";
-			// 	// 	const indexBegin = key.indexOf(keyWord);
-			// 	// 	const newKey = module.exports
-			// 	// 		.replaceRange(key, 0, indexBegin + 11, "")
-			// 	// 		.replace(/properties./gi, "")
-			// 	// 		.replace(".type", "");
-			// 	// 	auxInfoValues[newKey] = value;
-			// 	// }
-			// });
+						// const newKey = key.substring(0, indexBegin + 10);
+						// console.log(unflatten(newKey));
+
+						auxInfoValues[newKey] = value;
+
+						// let extractedArray = module.exports.extractArrayType(auxInfoValues);
+						// newCorrectArray = module.exports.removeArrayType(
+						// 	auxInfoValues,
+						// 	extractedArray
+						// );
+						// console.log(auxInfoValues);
+					}
+				});
+
+				// const extractedArray = module.exports.extractArrayType(auxInfoValues);
+				// const newCorrectArray = module.exports.removeArrayType(
+				// 	auxInfoValues,
+				// 	extractedArray
+				// );
+
+				// let newArray = {};
+				// newCorrectArray.map((entry) => {
+				// 	newArray[entry[0]] = entry[1];
+				// });
+
+				let keyMethod = {};
+				keyMethod["request"] = unflatten(auxInfoValues);
+				const auxMethod = {};
+				auxMethod[method] = keyMethod;
+				reportAPI[keys[i]] = auxMethod;
+
+				// console.log(reportAPI);
+				// const entries = Object.entries(flatten(fields));
+
+				// entries.map((entry) => {
+				// 	const key = entry[0];
+				// 	const value = entry[1];
+				// 	console.log(key);
+
+				// 	// if (RegExp(/.type/).test(key)) {
+				// 	// 	const keyWord = "properties";
+				// 	// 	const indexBegin = key.indexOf(keyWord);
+				// 	// 	const newKey = module.exports
+				// 	// 		.replaceRange(key, 0, indexBegin + 11, "")
+				// 	// 		.replace(/properties./gi, "")
+				// 	// 		.replace(".type", "");
+				// 	// 	auxInfoValues[newKey] = value;
+				// 	// }
+				// });
+			}
 		}
 		return "";
 	},
-	getResponsesApi: function (apiName, value, method, reportAPI, keys, i) {
+	getResponsesApi: function (value, method, reportAPI, keys, i) {
 		if (value.hasOwnProperty(method)) {
 			let auxInfoValues = {};
-			const aux =
-				value[method]["responses"]["200"]["content"]["application/json"][
-					"schema"
-				];
 
-			const entries = Object.entries(flatten(aux));
+			if (!value[method]["responses"]["200"].hasOwnProperty("content")) {
+				return;
+			} else {
+				const aux =
+					value[method]["responses"]["200"]["content"]["application/json"][
+						"schema"
+					];
 
-			entries.map((entry) => {
-				const key = entry[0];
-				const value = entry[1];
+				const entries = Object.entries(flatten(aux));
 
-				let newCorrectArray = {};
-				if (RegExp(/.type/).test(key)) {
-					const keyWord = "properties";
-					const indexBegin = key.indexOf(keyWord);
-					const newKey = module.exports
-						.replaceRange(key, 0, indexBegin + 11, "")
-						.replace(/properties./gi, "")
-						.replace(".type", "");
-					auxInfoValues[newKey] = value;
-					let extractedArray = module.exports.extractArrayType(auxInfoValues);
-					newCorrectArray = module.exports.removeArrayType(
-						auxInfoValues,
-						extractedArray
-					);
-				}
-				// console.log(newCorrectArray);
-			});
+				entries.map((entry) => {
+					const key = entry[0];
+					const value = entry[1];
 
-			const extractedArray = module.exports.extractArrayType(auxInfoValues);
-			const newCorrectArray = module.exports.removeArrayType(
-				auxInfoValues,
-				extractedArray
-			);
+					let newCorrectArray = {};
+					if (RegExp(/.type/).test(key)) {
+						const keyWord = "properties";
+						const indexBegin = key.indexOf(keyWord);
+						const newKey = module.exports
+							.replaceRange(key, 0, indexBegin + 11, "")
+							.replace(/properties./gi, "")
+							.replace(".type", "");
+						auxInfoValues[newKey] = value;
+						let extractedArray = module.exports.extractArrayType(auxInfoValues);
+						newCorrectArray = module.exports.removeArrayType(
+							auxInfoValues,
+							extractedArray
+						);
+					}
+				});
 
-			let newArray = {};
-			newCorrectArray.map((entry) => {
-				newArray[entry[0]] = entry[1];
-			});
+				const extractedArray = module.exports.extractArrayType(auxInfoValues);
+				const newCorrectArray = module.exports.removeArrayType(
+					auxInfoValues,
+					extractedArray
+				);
 
-			let keyMethod = {};
-			keyMethod["response"] = unflatten(newArray);
-			const auxMethod = {};
-			auxMethod[method] = keyMethod;
-			reportAPI[keys[i]] = auxMethod;
+				let newArray = {};
+				newCorrectArray.map((entry) => {
+					newArray[entry[0]] = entry[1];
+				});
+
+				let keyMethod = {};
+				keyMethod["response"] = unflatten(newArray);
+				const auxMethod = {};
+				auxMethod[method] = keyMethod;
+				reportAPI[keys[i]] = auxMethod;
+			}
 		}
 	},
+	wait: (milliseconds) =>
+		new Promise((resolve) => setTimeout(resolve, milliseconds)),
 };
