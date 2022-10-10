@@ -23,6 +23,13 @@ const querySchema = gql`
 	}
 	type Query {
 		getSimilaritiesFromAPIs(dataAPI: [inputAPI]): Report!
+		getStructure(dataAPI: [inputAPI]): [APINew]
+	}
+
+	type APINew {
+		name: String
+		requests: JSON
+		responses: JSON
 	}
 `;
 

@@ -19,6 +19,7 @@
     "apollo-server": "^3.6.1",
     "apollo-server-core": "^3.6.1",
     "flat": "^5.0.2",
+    "fs": "^0.0.1-security",
     "nodemon": "^2.0.15",
     "swagger-client": "^3.18.1"
   }

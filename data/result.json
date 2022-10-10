@@ -1,0 +1,233 @@
+[
+    {
+        "name": "API A",
+        "requests": [
+            {
+                "/lists.json": {
+                    "get": [
+                        {
+                            "list": "string"
+                        },
+                        {
+                            "bestsellers-date": "string"
+                        },
+                        {
+                            "published-date": "string"
+                        },
+                        {
+                            "offset": 0
+                        }
+                    ]
+                }
+            }
+        ],
+        "responses": [
+            {
+                "/lists.json": {
+                    "get": {
+                        "": [
+                            {
+                                "status": "string"
+                            },
+                            {
+                                "copyright": "string"
+                            },
+                            {
+                                "num_results": 0
+                            },
+                            {
+                                "last_modified": "string"
+                            },
+                            {
+                                "results": [
+                                    {
+                                        "list_name": "string"
+                                    },
+                                    {
+                                        "display_name": "string"
+                                    },
+                                    {
+                                        "bestsellers_date": "string"
+                                    },
+                                    {
+                                        "published_date": "string"
+                                    },
+                                    {
+                                        "rank": 0
+                                    },
+                                    {
+                                        "rank_last_week": 0
+                                    },
+                                    {
+                                        "weeks_on_list": 0
+                                    },
+                                    {
+                                        "asterisk": 0
+                                    },
+                                    {
+                                        "dagger": 0
+                                    },
+                                    {
+                                        "amazon_product_url": "string"
+                                    },
+                                    {
+                                        "isbns": [
+                                            {
+                                                "isbn10": "string"
+                                            },
+                                            {
+                                                "isbn13": "string"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "book_details": [
+                                            {
+                                                "title": "string"
+                                            },
+                                            {
+                                                "description": "string"
+                                            },
+                                            {
+                                                "contributor": "string"
+                                            },
+                                            {
+                                                "author": "string"
+                                            },
+                                            {
+                                                "contributor_note": "string"
+                                            },
+                                            {
+                                                "price": 0
+                                            },
+                                            {
+                                                "age_group": "string"
+                                            },
+                                            {
+                                                "publisher": "string"
+                                            },
+                                            {
+                                                "primary_isbn13": "string"
+                                            },
+                                            {
+                                                "primary_isbn10": "string"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "reviews": [
+                                            {
+                                                "book_review_link": "string"
+                                            },
+                                            {
+                                                "first_chapter_link": "string"
+                                            },
+                                            {
+                                                "sunday_review_link": "string"
+                                            },
+                                            {
+                                                "article_chapter_link": "string"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "name": "API Petstore",
+        "requests": [
+            {
+                "/pet/{petId}/uploadImage": {
+                    "post": [
+                        {
+                            "petId": 0
+                        },
+                        {
+                            "additionalMetadata": "string"
+                        },
+                        {
+                            "file": "file"
+                        }
+                    ]
+                }
+            },
+            {
+                "/pet/findByStatus": {
+                    "get": [
+                        {
+                            "status": [
+                                "string"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ],
+        "responses": [
+            {
+                "/pet/{petId}/uploadImage": {
+                    "post": {
+                        "ApiResponse": [
+                            {
+                                "code": 0
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "message": "string"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "/pet/findByStatus": {
+                    "get": {
+                        "Pet": [
+                            {
+                                "id": 0
+                            },
+                            {
+                                "category": [
+                                    {
+                                        "id": 0
+                                    },
+                                    {
+                                        "name": "string"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "string"
+                            },
+                            {
+                                "photoUrls": [
+                                    "string"
+                                ]
+                            },
+                            {
+                                "tags": [
+                                    {
+                                        "id": 0
+                                    },
+                                    {
+                                        "name": "string"
+                                    }
+                                ]
+                            },
+                            {
+                                "status": "string"
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+]

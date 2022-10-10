@@ -1,10 +1,74 @@
 const SwaggerParser = require("@apidevtools/swagger-parser");
 
-const { getResponsesApi, getRequestsAPI, wait } = require("../../utils");
+const {
+	getNewRequestsAPI,
+	getNewResponseAPI,
+	getRequests2,
+	wait,
+	isValidAPI,
+	adapateToJson,
+	saveJson,
+} = require("../../utils");
 const flatten = require("flat");
 
 const resolvers = {
 	Query: {
+		getStructure: async (_, { dataAPI }) => {
+			let resultJson = [];
+			let arrayJson = [];
+			return dataAPI.map(async (api, api_i) => {
+				if (isValidAPI(SwaggerParser, api)) {
+					let parser = new SwaggerParser();
+					const apiRef = await parser.dereference(api.path);
+					const apiBundle = await parser.bundle(api.path);
+
+					const apiKeys = Object.keys(apiRef.paths);
+					const apiValues = Object.values(apiRef.paths);
+
+					let requests = [];
+					let responses = [];
+
+					apiValues.map(async (apiValue, i) => {
+						["get", "post", "put"].map((method) => {
+							getRequests2(apiValue, method, requests, apiKeys, i, apiBundle);
+							getNewResponseAPI(
+								apiValue,
+								method,
+								responses,
+								apiKeys,
+								i,
+								apiBundle
+							);
+						});
+					});
+
+					requests = adapateToJson(requests);
+					responses = adapateToJson(responses);
+
+					//Object Json
+					resultJson = {
+						name: api.name,
+						requests,
+						responses,
+					};
+
+					arrayJson.push(resultJson);
+
+					//Save JSON
+					if (api_i + 1 == dataAPI.length) {
+						saveJson("data/result.json", arrayJson, 4);
+					}
+
+					return resultJson;
+				} else {
+					return {
+						name: "Error! Any API is invalid!",
+						requests: "Error! Any API is invalid!",
+						responses: "Error! Any API is invalid!",
+					};
+				}
+			});
+		},
 		getSimilaritiesFromAPIs: async (_, { dataAPI }) => {
 			const len = dataAPI.length;
 			if (len <= 1) {
@@ -44,14 +108,46 @@ const resolvers = {
 			// Time to ensure that requests and responses are integrated for each API
 			await wait(200);
 
-			dataAPI.map((currentApi, i) => {
-				dataAPI.slice(i + 1).map((targetApi) => {
+			const apisExample = [
+				{
+					name: "TiTechNF",
+					requests: [
+						{ "/api/request/NF1": { get: [{ id: "int" }] } },
+						{ "/api/request/NF2": { get: [{ num: "int" }] } },
+						{ "/api/request/NF3": { post: [Object] } },
+					],
+					responses: [
+						{ "/api/response/NF1": { get: [{ name: "string" }] } },
+						{ "/api/response/NF2": { get: [{ email: "string" }] } },
+						{
+							"/api/response/NF3": {
+								post: [{ mat: "string" }, { id: "int" }],
+							},
+						},
+					],
+				},
+				{
+					name: "TiTechC",
+					requests: [{ "/api/request/C1": { post: [{ name: "string" }] } }],
+					responses: [
+						{ "/api/response/C1": { get: [{ user: "string" }] } },
+						{ "/api/response/C2": { post: [Object] } },
+						{ "/api/response/C3": { post: [Object] } },
+					],
+				},
+			];
+
+			let apis = apisExample;
+
+			apis.map((currentApi, i) => {
+				apis.slice(i + 1).map((targetApi) => {
 					currentApi.responses.map((response, itRes) => {
 						//Check response data on API
-						if (Object.values(Object.values(response)[0])[0]) {
+						if (!Object.values(Object.values(response)[0])[0]) {
 							return;
 						} else {
 							targetApi.requests.map((request, itReq) => {
+								// console.log(Object.values(Object.values(response)[0]));
 								Object.values(Object.values(response)[0])[0].map((res) => {
 									Object.values(Object.values(request)[0])[0].map((req) => {
 										if (Object.keys(res)[0] == Object.keys(req)[0]) {
@@ -102,32 +198,3 @@ const resolvers = {
 };
 
 module.exports = resolvers;
-
-// const apis = [
-// 	{
-// 		name: "TiTechNF",
-// 		requests: [
-// 			{ "/api/request/NF1": { get: [{ id: "int" }] } },
-// 			{ "/api/request/NF2": { get: [{ num: "int" }] } },
-// 			{ "/api/request/NF3": { post: [Object] } },
-// 		],
-// 		responses: [
-// 			{ "/api/response/NF1": { get: [{ name: "string" }] } },
-// 			{ "/api/response/NF2": { get: [{ email: "string" }] } },
-// 			{
-// 				"/api/response/NF3": {
-// 					post: [{ name: "string" }, { id: "int" }],
-// 				},
-// 			},
-// 		],
-// 	},
-// 	{
-// 		name: "TiTechC",
-// 		requests: [{ "/api/request/C1": { post: [{ email: "string" }] } }],
-// 		responses: [
-// 			{ "/api/response/C1": { get: [{ user: "string" }] } },
-// 			{ "/api/response/C2": { post: [Object] } },
-// 			{ "/api/response/C3": { post: [Object] } },
-// 		],
-// 	},
-// ];
